@@ -1,0 +1,39 @@
+# 应用端口，Eureka服务端默认为：8761
+server:
+  port: 8099
+# 应用名称，将会显示在Eureka界面的应用名称列
+spring:
+  application:
+    name: demo-service
+  shardingsphere:
+    datasource:
+      names: ds0
+      ds0:
+        type: com.alibaba.druid.pool.DruidDataSource
+        url: jdbc:mysql://172.30.10.43:3306/sdp_message?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC&zeroDateTimeBehavior=convertToNull
+        driver-class-name: com.mysql.jdbc.Driver
+        username: sdp_test
+        password: WJjUh45gZH3Dz8jB-mkT
+    sharding:
+      tables:
+        t_user:
+          actual-data-nodes: ds0.t_user_$->{0..1}
+          #主键策略
+          key-generateor:
+            cloum: id
+            type: SNOWFLAKE
+          #分片算法
+          table-strategy:
+            inline:
+              sharding-column: COMPANY_ID
+              algorithm-expression: t_user_$->{COMPANY_ID % 2}
+    props:
+      sql:
+        show: true
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:8765/eureka
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
