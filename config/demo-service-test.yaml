@@ -38,4 +38,4 @@ eureka:
     prefer-ip-address: true
     instance-id: ${spring.cloud.client.ip-address}:${server.port}
 config:
-  info: "master branch,springcloud-config/config-prod.yml version=1"
+  info: "master branch,springcloud-config/config-prod.yml version=2"
